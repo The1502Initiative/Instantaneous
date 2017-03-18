@@ -5,7 +5,7 @@
 function sendMessage(e) {
   e.preventDefault();
   const inputNode = e.target.message;
-  const message = inputNode.value;
+  const message = inputNode.value + '\n';
   console.log("Sending message:", message);
   // Clear node
   inputNode.value = '';
