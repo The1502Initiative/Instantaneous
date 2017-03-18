@@ -74,3 +74,32 @@ form div {
 :-ms-input-placeholder {
    text-align: center;
 }
+
+.message-wrapper {
+  display: block;
+}
+
+.message {
+  padding: 7px;
+  border-style: solid;
+  border-radius: 13px;
+  display: inline-block;
+  word-wrap: break-word;
+  direction: ltr;
+  float: left;
+}
+
+.their-message {
+  left: 0;
+  right: auto;
+  text-align: left;
+  margin: 10px 0 10px 35%;
+}
+
+
+.my-message {
+  text-align: right;
+  right: 0;
+  left: auto;
+  margin: 10px 35% 10px 0;
+}

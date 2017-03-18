@@ -7,9 +7,9 @@
 function parseMessages(messageArray) {
   const messageContainer = document.getElementById("messages");
   messageArray.forEach((message) => {
-    const messageElement = document.createElement("div");
+    const messageElement = document.createElement("p");
     messageElement.classList.add("message");
-    if (messageElement.id === config.id) {
+    if (message.id === config.id) {
       messageElement.classList.add("my-message");
     }
     else {
@@ -19,8 +19,12 @@ function parseMessages(messageArray) {
     const text = document.createTextNode(message.text);
     messageElement.appendChild(text);
 
+    const messageWrapper = document.createElement("div");
+    messageWrapper.classList.add("message-wrapper");
+
     // Add the message
-    messageContainer.appendChild(messageElement);
+    messageWrapper.appendChild(messageElement);
+    messageContainer.appendChild(messageWrapper);
   });
 }
 
@@ -77,3 +81,6 @@ function connect() {
 }
 
 connect();
+
+const testMessages = [{id: 1, text:"What's up you hot piece of ass?"}, {id: 2, text:"What the hell are you saying you offensive cunt?"}];
+setTimeout(parseMessages.bind(null, testMessages), 1*1000);
