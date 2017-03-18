@@ -61,4 +61,18 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+### Vim ###
+# swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+# session
+Session.vim
+# temporary
+.netrwhist
+*~
+# auto-generated tag files
+tags
+
 # End of https://www.gitignore.io/api/linux,windows,java
