@@ -6,10 +6,11 @@ import java.util.Vector;
 public class chatServerThread extends Thread {
     protected Socket socket;
     protected Database db;
+    Integer id;
 
     public chatServerThread(Socket connectionSocket, Database database) {
         this.socket = connectionSocket;
-        this.db = database; //this object should be shared accross all threads
+        this.db = database; //this object should be shared accross all threads 
     }
 
     public void run() {
@@ -32,7 +33,7 @@ public class chatServerThread extends Thread {
         while (true) {
             if (timeout) {
                 try {
-                    //deleteUser(Id)
+                    db.deleteUser(id);
                     socket.close(); //closes after a timeout
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -45,12 +46,15 @@ public class chatServerThread extends Thread {
                 System.out.println("Receiving HTTP request: " + method);
                 if (method.substring(0, 3).equals("GET")) {
                     System.out.println("GET method");
-                    
                     int index_idi = method.indexOf("?id=");
                     
                     if (index_idi > 0) { //Received "GET ~~/?id=123"
                         int index_idf = method.substring(index_idi).indexOf(" ");
                         Integer senderId = Integer.valueOf(method.substring(index_idi, index_idf));
+                        if (!id.equals(senderId)) { //if the id created on connection is different from query
+                            System.out.println("ID error: " + id.toString() + ", " + senderId.toString());
+                            return;
+                        }
                         List<Message> unsentMessages = new Vector<Message>();
                         unsentMessages = db.getUnsentMessages(senderId);
                         int len = unsentMessages.size();
@@ -61,27 +65,24 @@ public class chatServerThread extends Thread {
                             response += "{'id':" + msg.senderId + ",'text':" + msg.text + "}";
                             if (i != len) response += ","; 
                         }
-                        response = "[" + response + "]";
+                        response = "[" + response + "]" + "\n\r";
                         outToClient.writeBytes(response);
                         outToClient.flush();
                     }
                     else { //Received "GET /" connect: add user to db, return id
-                        Integer user_id = db.addUser();
-                        String response = "{id:" + user_id.toString() + "}";
+                        id = db.addUser();
+                        String response = "{id:" + id.toString() + "}" + "\n\r";
                         outToClient.writeBytes(response);
                         outToClient.flush();
                     }
-                    
                 }
-                else if (method.substring(0,4).equals("POST")) {
+                else if (method.substring(0,4).equals("POST")) { //Received "POST" add message to queue
                     do {
                         clientSentence = inFromClient.readLine();
                     } while (!clientSentence.equals(""));
                     clientSentence = inFromClient.readLine();
                     System.out.println("received message: " + clientSentence);
-                    //add message
-                    outToClient.writeBytes(clientSentence + "\n\r");
-                    outToClient.flush();
+                    db.addMessage(clientSentence, id);
                 }
                 else {
                     System.out.println("Error: wrong method " + method);
