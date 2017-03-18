@@ -9,12 +9,6 @@ function parseMessages(messageArray) {
   messageArray.forEach((message) => {
     const messageElement = document.createElement("p");
     messageElement.classList.add("message");
-    if (message.id === config.id) {
-      messageElement.classList.add("my-message");
-    }
-    else {
-      messageElement.classList.add("their-message");
-    }
 
     const text = document.createTextNode(message.text);
     messageElement.appendChild(text);
@@ -22,7 +16,20 @@ function parseMessages(messageArray) {
     const messageWrapper = document.createElement("div");
     messageWrapper.classList.add("message-wrapper");
 
-    // Add the message
+    if (message.id === config.id) {
+      messageWrapper.classList.add("my-message");
+    }
+    else {
+      messageWrapper.classList.add("their-message");
+    }
+
+    const senderElement = document.createElement("span");
+    const sender = document.createTextNode(message.id);
+    senderElement.appendChild(sender);
+
+    // Add the message and writer
+    messageWrapper.appendChild(senderElement);
+    messageWrapper.appendChild(document.createElement("br"));
     messageWrapper.appendChild(messageElement);
     messageContainer.appendChild(messageWrapper);
   });
@@ -82,5 +89,5 @@ function connect() {
 
 connect();
 
-const testMessages = [{id: 1, text:"What's up you hot piece of ass?"}, {id: 2, text:"What the hell are you saying you offensive cunt?"}];
+const testMessages = [{id: "Emil Goldsmith Olesen", text:"Whathsdajflksahflksahflksahflkahflkahflkahflkahfahflahflkahflkahflahflkahflahflahflafhdlkj's up you hot piece of ass?"}, {id: "Simon Seo", text:"Whatwadhfaskdhlkhdlkjsahfdlkahfdlahflksahflksahflksahfkjdsahfkjdsalhfdlksahflksahfahflksahfdlahflahflafdhdhka the hell are you saying you offensive cunt?"}];
 setTimeout(parseMessages.bind(null, testMessages), 1*1000);

@@ -4,5 +4,6 @@
  * the client to connect to.
  */
 const config = {
-  hostUrl: "http://10.208.57.4:12300",
+  hostUrl: "http://10.208.57.4:3000",
+  id: "Emil Goldsmith Olesen",
 };
