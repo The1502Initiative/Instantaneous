@@ -5,6 +5,8 @@ public class Database {
   private Integer nextMessageId = 1;
   private Map<Integer, UserInfo> userData = new HashMap<Integer, UserInfo>();
   private LinkedList<Message> messageBuffer = new LinkedList<Message>();
+  // Counter used to time garbage collection
+  private Integer messageCounter = 0;
 
   public Integer addUser() {
     Integer assigned_id = nextUserId++;
@@ -40,6 +42,10 @@ public class Database {
   public void addMessage(String message, Integer senderId) {
     Message messageObject = new Message(nextMessageId++, senderId, message);
     messageBuffer.add(messageObject);
+    if ((++messageCounter) == 1000) {
+      this.garbageCollect();
+      messageCounter = 0;
+    }
   }
 
   private void garbageCollect() {

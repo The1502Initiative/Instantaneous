@@ -26,9 +26,17 @@ function parseMessages(messageArray) {
 
 function pingForUpdates() {
   const xhr = new XMLHttpRequest();
+
+  xhr.addEventListener("error", (e) => {
+    console.log(e);
+  });
+
   xhr.onload = (e) => {
+    if (xhr.status !== 200) {
+      return window.alert("There was an error connecting to the server");
+    }
+
     const response = xhr.response;
-    console.log(response);
     if (response.messages) {
       parseMessages(response.messages);
     }
@@ -40,9 +48,23 @@ function pingForUpdates() {
 
 function connect() {
   const xhr = new XMLHttpRequest();
+
+  xhr.addEventListener("error", (e) => {
+    console.log(e);
+  });
+
   xhr.onload = (e) => {
+    if (xhr.status !== 200) {
+      return window.alert("An arrow occured connecting to the server, sorry");
+    }
     const response = xhr.response;
-    console.log(response);
+    // Set id
+    config.id = response.id;
+    if (!config.id) {
+      console.log("No id was returned");
+      // Try connecting again
+      return connect();
+    }
     // Remove the connecting message
     const connectingMessage = document.getElementById("connecting");
     connectingMessage.remove();
