@@ -4,5 +4,5 @@
  * the client to connect to.
  */
 const config = {
-  hostUrl: "The best host",
+  hostUrl: "http://10.208.57.4:12300",
 };

@@ -6,6 +6,7 @@ function sendMessage(e) {
   e.preventDefault();
   const inputNode = e.target.message;
   const message = inputNode.value;
+  console.log("Sending message:", message);
   // Clear node
   inputNode.value = '';
 
@@ -16,7 +17,12 @@ function sendMessage(e) {
     console.log(response);
   }
 
+  xhr.addEventListener("error", (e) => {
+    console.log(e);
+  });
+
   xhr.open("POST", config.hostUrl);
+  xhr.setRequestHeader("Content-type", "text/plain");
   xhr.send(message);
 }
 
