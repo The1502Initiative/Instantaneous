@@ -13,8 +13,9 @@ function sendMessage(e) {
   // Send the message
   const xhr = new XMLHttpRequest();
   xhr.onload = (e) => {
-    const response = xhr.response;
-    console.log(response);
+    if (xhr.status !== 200) {
+      return window.alert("Error sending message to server");
+    }
   }
 
   xhr.addEventListener("error", (e) => {
