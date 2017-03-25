@@ -8,10 +8,10 @@ public class Database {
   // Counter used to time garbage collection
   private Integer messageCounter = 0;
 
-  public Integer addUser() {
+  public Integer addUser(String name) {
     Integer assigned_id = nextUserId++;
     Node<Message> lastMessageNode = messageBuffer.getTail();
-    userData.put(assigned_id, new UserInfo(assigned_id, lastMessageNode));
+    userData.put(assigned_id, new UserInfo(assigned_id, name, lastMessageNode));
     return assigned_id;
   }
 
@@ -48,6 +48,10 @@ public class Database {
     }
   }
 
+  public String getName(Integer userId) {
+    return userData.get(userId).getName();
+  }
+
   private void garbageCollect() {
     Iterator it = userData.entrySet().iterator();
     System.out.println("Garbage collection starting");
@@ -75,9 +79,11 @@ public class Database {
 class UserInfo {
   private Node<Message> lastMessageReceivedNode;
   private Integer id;
+  private String name;
 
-  public UserInfo(Integer userId, Node<Message> listTail) {
+  public UserInfo(Integer userId, String userName, Node<Message> listTail) {
     id = userId;
+    name = userName;
     lastMessageReceivedNode = listTail;
   }
 
@@ -91,6 +97,10 @@ class UserInfo {
 
   public Integer getUserId() {
     return id;
+  }
+
+  public String getName() {
+    return name;
   }
 }
 
