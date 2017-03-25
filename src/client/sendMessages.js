@@ -22,7 +22,7 @@ function sendMessage(e) {
     console.log(e);
   });
 
-  xhr.open("POST", config.hostUrl + '?id=' config.id.toString());
+  xhr.open("POST", config.hostUrl + '?id='+ config.id.toString());
   xhr.setRequestHeader("Content-type", "text/plain");
   xhr.send(message);
 }
