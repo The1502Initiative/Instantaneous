@@ -74,6 +74,15 @@ public class Database {
       messageBuffer.deleteFront();
     }
   }
+  public void printMap() {
+    Iterator it = userData.entrySet().iterator();
+    while (it.hasNext()) {
+      Map.Entry<Integer, UserInfo> pair = (Map.Entry<Integer, UserInfo>)it.next();
+      System.out.println(pair.getKey() + " = " + pair.getValue());
+      it.remove(); // avoids a ConcurrentModificationException
+    }
+  }
+
 }
 
 class UserInfo {
