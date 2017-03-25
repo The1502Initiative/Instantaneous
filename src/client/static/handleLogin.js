@@ -83,7 +83,7 @@ function connect() {
     const connectingMessage = document.getElementById("connecting");
     connectingMessage.remove();
     // Start pinging for updates
-    setInterval(pingForUpdates, 500);
+    setInterval(pingForUpdates, 200);
   };
   xhr.responseType = "json";
   xhr.open("GET", config.hostUrl + '?name=' + config.name);
