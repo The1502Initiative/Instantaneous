@@ -1,0 +1,23 @@
+{
+  "name": "instantaneous",
+  "version": "1.0.0",
+  "description": "An awesome instant messaging app written by Emil and Simon",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/The1502Initiative/Instantaneous.git"
+  },
+  "author": "Emil Goldsmith Olesen and Simon Myunggun Seo",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/The1502Initiative/Instantaneous/issues"
+  },
+  "homepage": "https://github.com/The1502Initiative/Instantaneous#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
