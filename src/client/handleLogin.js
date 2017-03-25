@@ -32,6 +32,7 @@ function parseMessages(messageArray) {
     messageWrapper.appendChild(document.createElement("br"));
     messageWrapper.appendChild(messageElement);
     messageContainer.appendChild(messageWrapper);
+    messageContainer.scrollTop = messageContainer.scrollHeight;
   });
 }
 
