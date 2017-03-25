@@ -23,7 +23,6 @@ public class chatServerThread extends Thread {
         try {
             inFromClient = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), "UTF-8"));
             outToClient = new PrintWriter(this.socket.getOutputStream());
-            //
         } catch (IOException e) {
             return;
         }
@@ -32,7 +31,7 @@ public class chatServerThread extends Thread {
         String clientSentence = null;
         String method = null;
         boolean timeout = false;
-        //TODO implement timeout check
+
         if (timeout) {
             try {
                 this.db.deleteUser(id);
@@ -53,59 +52,69 @@ public class chatServerThread extends Thread {
             String response = "";
             String header = "HTTP/1.1 200 OK\n" + 
             "Content-Type: application/json\n" + 
-            "Access-Control-Allow-Origin: *\n";
+            "Access-Control-Allow-Origin: *\n" +
+            "Connection: close\n";
             if (method.substring(0, 3).equals("GET")) {
                 System.out.println("GET method");
-                int index_idi = method.indexOf("?id=");
+                
                 
                 /* Case 1. Received "GET ~~/?id=123" ping */
-                if (index_idi > 0) {
+                if (method.indexOf("?id=") > 0) {
                     System.out.println("Case 1. received GET, retrieving message from db.");
-                    int index_idf = method.substring(index_idi).indexOf(" ");
-                    Integer senderId = Integer.valueOf(method.substring(index_idi, index_idf));
-                    if (!id.equals(senderId)) { //if the id created on connection is different from query
-                        System.out.println("ID error: " + this.id.toString() + ", " + senderId.toString());
-                        return;
-                    }
+                    String queryOption = "?id=";
+                    int index_i = method.indexOf(queryOption) + queryOption.length();
+                    int index_f = index_i + method.substring(index_i).indexOf(" ");
+                    Integer senderId = Integer.valueOf(method.substring(index_i, index_f));
                     List<Message> unsentMessages = new Vector<Message>();
                     unsentMessages = this.db.getUnsentMessages(senderId);
                     if (unsentMessages == null) {
                         System.out.println("no unsent messages");
-                        header += "Content-Length: 0\n" + "\n";
-                        System.out.println("writing response: " + header);
+                        response = "{}\r\n";
+                        header += "Content-Length: " + response.length() + "\n" + "\n";
+//                        System.out.println("writing response: " + header + response);
+                        outToClient.print(header + response);
+                        outToClient.flush();
+                        
+                    }
+                    else {
+                        int len = unsentMessages.size();
+                        response = "";
+                        for (int i = 0; i < len; i++) {
+                            Message msg = unsentMessages.get(i);
+                            Integer msgSenderId = Integer.valueOf(msg.senderId);
+                            String msgSenderName = this.db.getName(msgSenderId);
+                            response += "{\"name\":\"" + msgSenderName + "\",\"text\":\"" + msg.text + "\"}";
+                            if (i != len-1) response += ","; 
+                        }
+                        response = "{\"messages\":[" + response + "]}" + "\r\n";
+                        header += "Content-Length: " + response.length() + "\n" + "\n";
+                        response = header + response;
+//                      System.out.println("writing response: " + response);
                         outToClient.print(response);
                         outToClient.flush();
                     }
-
-                    int len = unsentMessages.size();
-                    response = "";
-                    for (int i = 0; i < len; i++) {
-                        Message msg = unsentMessages.get(i);
-                        response += "{\"id\":" + msg.senderId + ",\"text\":" + msg.text + "}";
-                        if (i != len) response += ","; 
-                    }
-                    response = "[" + response + "]" + "\n\r";
-                    header += "Content-Length: " + response.length() + "\n" + "\n";
-                    response = header + response;
-                    System.out.println("writing response: " + response);
-                    outToClient.print(response);
-                    outToClient.flush();
                 }
                 /* Case 2. Received "GET ~~/?name=NAME": connect: add user to db, return id */
                 else {
-                    System.out.println("Case 2. received GET, adding new user to db.");
-                    this.id = this.db.addUser();
-                    response = "{\"id\":" + this.id.toString() + "}" + "\n\r";
+                    String queryOption = "?name=";
+                    int index_i = method.indexOf(queryOption) + queryOption.length();
+                    int index_f = index_i + method.substring(index_i).indexOf(" ");
+                    String senderName = method.substring(index_i, index_f);
+                    System.out.println("Case 2. received GET, adding new user " + senderName + " to db.");
+                    int id =  this.db.addUser(senderName);
+                    System.out.println("User added with id: " + this.db.getName(id));
+                    response = "{\"id\":" + id + "}" + "\r\n";
                     header += "Content-Length: " + response.length() + "\n" + "\n";
                     response = header + response;
-                    System.out.println("writing response: " + response);
+//                    System.out.println("writing response: " + response);
                     outToClient.print(response);
                     outToClient.flush();
                 }
                 try {
                     do{
                         clientSentence = inFromClient.readLine();
-                        System.out.println("flushing input" + clientSentence);
+//                        System.out.println("flsh" + clientSentence);
+//                        System.out.print("flsh");
                     } while (clientSentence != null);  
                 } catch (NullPointerException e) {
                     
@@ -115,24 +124,30 @@ public class chatServerThread extends Thread {
             /* Case 3. Received "POST": add message to queue */
             else if (method.substring(0,4).equals("POST")) {
                 System.out.println("Case 3. received POST, adding message to db.");
+                String queryOption = "?id=";
+                int index_i = method.indexOf(queryOption) + queryOption.length();
+                int index_f = index_i + method.substring(index_i).indexOf(" ");
+                Integer senderId = Integer.valueOf(method.substring(index_i, index_f));
                 do {
                     clientSentence = inFromClient.readLine();
                 } while (!clientSentence.equals(""));
                 clientSentence = inFromClient.readLine();
                 System.out.println("adding message to db: " + clientSentence);
-                this.db.addMessage(clientSentence, this.id);
-                header += "Content-Length: 0\n" + "\n";
-                System.out.println("writing response: " + header);
-                outToClient.print(response);
+                this.db.addMessage(clientSentence, senderId);
+                response = "{}\r\n";
+                header += "Content-Length: " + response.length() + "\n" + "\n";
+                outToClient.print(header + response);
                 outToClient.flush();
             }
             else {
                 System.out.println("Error: wrong method " + method);
             }
+            System.out.print("close socket");
             inFromClient.close();
             outToClient.close();
-            
-        } catch (IOException e) {
+            this.socket.close();
+
+        } catch (Throwable e) {
             e.printStackTrace();
             return;
         }
