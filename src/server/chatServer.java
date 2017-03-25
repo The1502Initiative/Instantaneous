@@ -7,8 +7,8 @@ public class chatServer {
 		int port = 3000;
 		InetAddress address = InetAddress.getLocalHost();
 		ServerSocket serverSocket = new ServerSocket(port);
-		System.out.println(serverSocket.getLocalSocketAddress());
-		System.out.println("Chat server listening on " + address + ":" + port);
+//		System.out.println(serverSocket.getLocalSocketAddress());
+		System.out.println("Chat server listening " + address + ":" + port);
         Socket connectionSocket = null;
 
 		while(true) { //run loop to wait for new connections

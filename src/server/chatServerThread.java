@@ -45,22 +45,22 @@ public class chatServerThread extends Thread {
         try {
             method = inFromClient.readLine();
             if (method == null || method.equals(null)) {
-                System.out.println("received null message");
+//                System.out.println("received null message");
                 return;
             }
-            System.out.println("Receiving HTTP request: " + method);
+//            System.out.println("Receiving HTTP request: " + method);
             String response = "";
             String header = "HTTP/1.1 200 OK\n" + 
             "Content-Type: application/json\n" + 
             "Access-Control-Allow-Origin: *\n" +
             "Connection: close\n";
             if (method.substring(0, 3).equals("GET")) {
-                System.out.println("GET method");
+//                System.out.println("GET method");
                 
                 
                 /* Case 1. Received "GET ~~/?id=123" ping */
                 if (method.indexOf("?id=") > 0) {
-                    System.out.println("Case 1. received GET, retrieving message from db.");
+//                    System.out.println("Case 1. received GET, retrieving message from db.");
                     String queryOption = "?id=";
                     int index_i = method.indexOf(queryOption) + queryOption.length();
                     int index_f = index_i + method.substring(index_i).indexOf(" ");
@@ -68,7 +68,7 @@ public class chatServerThread extends Thread {
                     List<Message> unsentMessages = new Vector<Message>();
                     unsentMessages = this.db.getUnsentMessages(senderId);
                     if (unsentMessages == null) {
-                        System.out.println("no unsent messages");
+//                      System.out.println("no unsent messages");
                         response = "{}\r\n";
                         header += "Content-Length: " + response.length() + "\n" + "\n";
 //                        System.out.println("writing response: " + header + response);
@@ -100,9 +100,9 @@ public class chatServerThread extends Thread {
                     int index_i = method.indexOf(queryOption) + queryOption.length();
                     int index_f = index_i + method.substring(index_i).indexOf(" ");
                     String senderName = method.substring(index_i, index_f);
-                    System.out.println("Case 2. received GET, adding new user " + senderName + " to db.");
+//                    System.out.println("Case 2. received GET, adding new user " + senderName + " to db.");
                     int id =  this.db.addUser(senderName);
-                    System.out.println("User added with id: " + this.db.getName(id));
+//                    System.out.println("User added with id: " + this.db.getName(id));
                     response = "{\"id\":" + id + "}" + "\r\n";
                     header += "Content-Length: " + response.length() + "\n" + "\n";
                     response = header + response;
@@ -123,7 +123,7 @@ public class chatServerThread extends Thread {
             }
             /* Case 3. Received "POST": add message to queue */
             else if (method.substring(0,4).equals("POST")) {
-                System.out.println("Case 3. received POST, adding message to db.");
+//                System.out.println("Case 3. received POST, adding message to db.");
                 String queryOption = "?id=";
                 int index_i = method.indexOf(queryOption) + queryOption.length();
                 int index_f = index_i + method.substring(index_i).indexOf(" ");
@@ -140,9 +140,9 @@ public class chatServerThread extends Thread {
                 outToClient.flush();
             }
             else {
-                System.out.println("Error: wrong method " + method);
+//                System.out.println("Error: wrong method " + method);
             }
-            System.out.print("close socket");
+//            System.out.print("close socket");
             inFromClient.close();
             outToClient.close();
             this.socket.close();
