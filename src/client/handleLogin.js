@@ -43,6 +43,7 @@ function pingForUpdates() {
   });
 
   xhr.onload = (e) => {
+    console.log(xhr.response);
     if (xhr.status !== 200) {
       return window.alert("There was an error connecting to the server");
     }
@@ -65,6 +66,7 @@ function connect() {
   });
 
   xhr.onload = (e) => {
+    console.log(xhr.response);
     if (xhr.status !== 200) {
       return window.alert("An arrow occured connecting to the server, sorry");
     }
@@ -80,6 +82,7 @@ function connect() {
     const connectingMessage = document.getElementById("connecting");
     connectingMessage.remove();
     // Start pinging for updates
+    console.log("nihao");
     setInterval(pingForUpdates, 500);
   };
   xhr.responseType = "json";

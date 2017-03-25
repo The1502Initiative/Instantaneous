@@ -7,8 +7,10 @@ public class chatServer {
 
 	public static void main(String[] args) throws Exception {
 		Database database = new Database();
-		ServerSocket serverSocket = new ServerSocket(3000);
-		System.out.println("Chat server running on " + serverSocket.getInetAddress() + serverSocket.getLocalPort());
+		int port = 3000;
+		InetAddress address = InetAddress.getLocalHost();
+		ServerSocket serverSocket = new ServerSocket(port);
+		System.out.println("Chat server listening on " + address + ":" + port);
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask(){
 			  @Override
@@ -24,6 +26,7 @@ public class chatServer {
 
 		while(true) { //run loop to wait for new connections
 			connectionSocket = serverSocket.accept();
+			System.out.println("started new thread");
 			new chatServerThread(connectionSocket, database).start();
 		}
 	}
