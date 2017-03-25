@@ -4,5 +4,5 @@
  * the client to connect to.
  */
 const config = {
-  hostUrl: "http://10.209.30.27:3000",
+  hostUrl: "https://server.instantaneous.world",
 };
