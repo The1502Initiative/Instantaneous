@@ -86,6 +86,7 @@ h2 {
   display: inline-block;
   word-wrap: break-word;
   margin: 0;
+  max-width: 95%;
 }
 
 .their-message {
