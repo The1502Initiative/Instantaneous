@@ -104,10 +104,11 @@ function login(e) {
   config.name = name;
   const loginPage = document.getElementById('login');
   loginPage.style.display = 'none';
+  document.getElementById('message-input').focus();
   // Connect to server
   connect();
 
-  const testMessages = [{id: "Emil Goldsmith Olesen", text:"Whathsdajflksahflksahflksahflkahflkahflkahflkahfahflahflkahflkahflahflkahflahflahflafhdlkj's up you hot piece of ass?"}, {id: "Simon Seo", text:"Whatwadhfaskdhlkhdlkjsahfdlkahfdlahflksahflksahflksahfkjdsahfkjdsalhfdlksahflksahfahflksahfdlahflahflafdhdhka the hell are you saying you offensive cunt?"}];
+  const testMessages = [{name: "Emil", text:"Whathsdajflksahflksahflksahflkahflkahflkahflkahfahflahflkahflkahflahflkahflahflahflafhdlkj's up you hot piece of ass?"}, {name: "Simon Seo", text:"Whatwadhfaskdhlkhdlkjsahfdlkahfdlahflksahflksahflksahfkjdsahfkjdsalhfdlksahflksahfahflksahfdlahflahflafdhdhka the hell are you saying you offensive cunt?"}];
   setTimeout(parseMessages.bind(null, testMessages), 1*1000);
 }
 

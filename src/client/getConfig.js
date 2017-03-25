@@ -5,5 +5,4 @@
  */
 const config = {
   hostUrl: "http://10.209.30.27:3000",
-  id: "Emil Goldsmith Olesen",
 };
