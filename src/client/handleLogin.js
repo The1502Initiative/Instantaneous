@@ -82,7 +82,6 @@ function connect() {
     const connectingMessage = document.getElementById("connecting");
     connectingMessage.remove();
     // Start pinging for updates
-    console.log("nihao");
     setInterval(pingForUpdates, 500);
   };
   xhr.responseType = "json";
@@ -107,9 +106,6 @@ function login(e) {
   document.getElementById('message-input').focus();
   // Connect to server
   connect();
-
-  const testMessages = [{name: "Emil", text:"Whathsdajflksahflksahflksahflkahflkahflkahflkahfahflahflkahflkahflahflkahflahflahflafhdlkj's up you hot piece of ass?"}, {name: "Simon Seo", text:"Whatwadhfaskdhlkhdlkjsahfdlkahfdlahflksahflksahflksahfkjdsahfkjdsalhfdlksahflksahfahflksahfdlahflahflafdhdhka the hell are you saying you offensive cunt?"}];
-  setTimeout(parseMessages.bind(null, testMessages), 1*1000);
 }
 
 function initializeLogin() {

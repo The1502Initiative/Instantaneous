@@ -74,7 +74,8 @@ public class Database {
       messageBuffer.deleteFront();
     }
   }
-  public void printMap() {
+  public void printUsers() {
+    System.out.println("Printing users");
     Iterator it = userData.entrySet().iterator();
     while (it.hasNext()) {
       Map.Entry<Integer, UserInfo> pair = (Map.Entry<Integer, UserInfo>)it.next();
@@ -82,7 +83,6 @@ public class Database {
       it.remove(); // avoids a ConcurrentModificationException
     }
   }
-
 }
 
 class UserInfo {
