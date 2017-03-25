@@ -53,7 +53,7 @@ function pingForUpdates() {
     }
   };
   xhr.responseType = "json";
-  xhr.open("GET", config.hostUrl);
+  xhr.open("GET", config.hostUrl + '?id=' + config.id.toString());
   xhr.send();
 }
 
