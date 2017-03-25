@@ -16,7 +16,7 @@ function parseMessages(messageArray) {
     const messageWrapper = document.createElement("div");
     messageWrapper.classList.add("message-wrapper");
 
-    if (message.id === config.id) {
+    if (message.name === config.name) {
       messageWrapper.classList.add("my-message");
     }
     else {
@@ -24,7 +24,7 @@ function parseMessages(messageArray) {
     }
 
     const senderElement = document.createElement("span");
-    const sender = document.createTextNode(message.id);
+    const sender = document.createTextNode(message.name);
     senderElement.appendChild(sender);
 
     // Add the message and writer
@@ -83,11 +83,34 @@ function connect() {
     setInterval(pingForUpdates, 500);
   };
   xhr.responseType = "json";
-  xhr.open("GET", config.hostUrl);
+  xhr.open("GET", config.hostUrl + '?name=' + config.name);
   xhr.send();
 }
 
-connect();
+// Handle the login page which will occur before logging in
 
-const testMessages = [{id: "Emil Goldsmith Olesen", text:"Whathsdajflksahflksahflksahflkahflkahflkahflkahfahflahflkahflkahflahflkahflahflahflafhdlkj's up you hot piece of ass?"}, {id: "Simon Seo", text:"Whatwadhfaskdhlkhdlkjsahfdlkahfdlahflksahflksahflksahfkjdsahfkjdsalhfdlksahflksahfahflksahfdlahflahflafdhdhka the hell are you saying you offensive cunt?"}];
-setTimeout(parseMessages.bind(null, testMessages), 1*1000);
+function login(e) {
+  e.preventDefault();
+  const node = e.target.name;
+  const name = node.value;
+  if (name.indexOf(' ') >= 0) {
+    return window.alert("No spaces allowed in name, please try again");
+  }
+  // Name was valid
+  node.value = '';
+  config.name = name;
+  const loginPage = document.getElementById('login');
+  loginPage.style.display = 'none';
+  // Connect to server
+  connect();
+
+  const testMessages = [{id: "Emil Goldsmith Olesen", text:"Whathsdajflksahflksahflksahflkahflkahflkahflkahfahflahflkahflkahflahflkahflahflahflafhdlkj's up you hot piece of ass?"}, {id: "Simon Seo", text:"Whatwadhfaskdhlkhdlkjsahfdlkahfdlahflksahflksahflksahfkjdsahfkjdsalhfdlksahflksahfahflksahfdlahflahflafdhdhka the hell are you saying you offensive cunt?"}];
+  setTimeout(parseMessages.bind(null, testMessages), 1*1000);
+}
+
+function initializeLogin() {
+  const form = document.getElementById('login-form');
+  form.addEventListener('submit', login);
+}
+
+initializeLogin();

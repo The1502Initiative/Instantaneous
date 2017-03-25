@@ -28,7 +28,7 @@ function sendMessage(e) {
 }
 
 function initializeForm() {
-  const form = document.getElementsByTagName('form')[0];
+  const form = document.getElementById('message-form');
   form.addEventListener('submit', sendMessage);
 }
 

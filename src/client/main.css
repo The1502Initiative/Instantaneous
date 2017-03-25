@@ -30,13 +30,13 @@ h2 {
   overflow-y: auto;
 }
 
-form {
+#message-form {
   width: 60%;
   height: 33px;
   margin: auto;
 }
 
-form div {
+#message-form div {
   width: 80%;
   height: 100%;
   margin: 10px auto 0 auto;
@@ -119,3 +119,27 @@ form div {
   margin: 0 8px 0 0;
 }
 
+/* Login page */
+#login {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  background-color: white;
+}
+
+#login-form {
+  width: 500px;
+  height: 100px;
+  margin: auto;
+  font-size: 30px;
+}
+
+#name-input {
+  width: 90%;
+  height: 90%;
+  font-size: 40px;
+  margin: 5px;
+}
